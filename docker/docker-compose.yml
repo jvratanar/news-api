@@ -42,7 +42,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: root@root.com
       PGADMIN_DEFAULT_PASSWORD: root
     volumes:
-      - ~/DockerVolumes/news-api/vol_pgadmin4/:/var/lib/pgadmin
+      - ~/DockerVolumes/newscms/news-api/vol_pgadmin4/:/var/lib/pgadmin
     ports:
       - 8001:1111
     depends_on: [news_api_db]
