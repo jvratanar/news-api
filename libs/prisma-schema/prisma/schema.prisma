@@ -11,20 +11,52 @@ datasource db {
 }
 
 model User {
-    id        Int     @id @default(autoincrement())
-    email     String  @unique @db.VarChar(64)
-    firstName String  @db.VarChar(64)
-    lastName  String  @db.VarChar(64)
-    active    Boolean @default(true)
+    id        Int      @id @default(autoincrement())
+    email     String   @unique @db.VarChar(64)
+    firstName String   @db.VarChar(64)
+    lastName  String   @db.VarChar(64)
+    active    Boolean  @default(true)
+    type      UserType @default(AUTHOR)
     posts     Post[]
+}
+
+enum UserType {
+    AUTHOR
+    TOPIC_EDITOR
+    EDITOR
+    ADMIN
 }
 
 model Post {
     id        Int      @id @default(autoincrement())
     title     String   @db.VarChar(256)
+    titleEn   String   @db.VarChar(256)
     summary   String   @db.VarChar(1024)
+    summaryEn String   @db.VarChar(1024)
     content   String?
+    contentEn String?
     published Boolean? @default(false)
-    author    User?    @relation(fields: [authorId], references: [id])
-    authorId  Int?
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  Int
+    topic     Topic    @relation(fields: [topicId], references: [id])
+    topicId   Int
+}
+
+model Topic {
+    id       Int              @id @default(autoincrement())
+    name     String           @db.VarChar(256)
+    nameEn   String           @db.VarChar(256)
+    level    Int              @db.SmallInt
+    enabled  Boolean          @default(true)
+    posts    Post[]
+    parents  TopicHierarchy[] @relation("parents")
+    children TopicHierarchy[] @relation("children")
+}
+
+model TopicHierarchy {
+    id       Int   @id @default(autoincrement())
+    parent   Topic @relation("parents", fields: [parentId], references: [id])
+    parentId Int
+    child    Topic @relation("children", fields: [childId], references: [id])
+    childId  Int
 }

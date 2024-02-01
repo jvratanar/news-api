@@ -6,6 +6,6 @@ export class PostService {
   constructor(private prismaService: PrismaService) {}
 
   async getPost(whereCondition: Prisma.PostWhereUniqueInput) {
-    return this.prismaService.post.findUnique({ where: whereCondition });
+    return this.prismaService.post.findUniqueOrThrow({ where: whereCondition });
   }
 }
